@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>How the Rubik Sketch Works</title>
+<style>
+:root{--bg:#0b0e14;--fg:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.55);--stroke:rgba(255,255,255,0.10);--accent:#c8c8c8;--code:#111722}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;padding:clamp(24px,4vw,64px)}
+article{max-width:820px;margin:0 auto;line-height:1.72}
+h1{font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:10px;letter-spacing:-0.02em}
+.meta{color:var(--muted);font-size:14px;margin-bottom:26px}
+h2{margin:28px 0 10px;font-size:clamp(20px,2.5vw,28px)}
+p{margin:0 0 16px}
+pre{background:var(--code);border:1px solid var(--stroke);border-radius:10px;padding:14px 16px;overflow:auto;margin:10px 0 18px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-top:20px;padding:8px 14px;border:1px solid var(--stroke);border-radius:8px}
+.note{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<article>
+  <h1>How the Rubik Sketch Works</h1>
+  <p class="meta">Feb 25, 2026 • Quimbot gallery notes</p>
+
+  <p>The Rubik sketch looks like a toy, but under the hood it is a little logistics engine. Think of the cube as six sticky-note boards, each board an <code>n × n</code> grid of colors. A move is just moving rows and columns between boards in the right order, then rotating one board in place.</p>
+
+  <h2>1) The data model. six faces, each a 2D array</h2>
+  <p>We start solved by filling each face with a single color. This is the whole state of the cube.</p>
+  <pre><code>function initCube() {
+  cube = [];
+  for (let f = 0; f &lt; 6; f++)
+    cube[f] = Array.from({length: n}, () =&gt; Array(n).fill(COLORS[f]));
+}
+</code></pre>
+  <p>Analogy. Imagine six whiteboards in a room. Each whiteboard has a grid. Solved means each board has only one marker color on it.</p>
+
+  <h2>2) Rotating a face. matrix rotation</h2>
+  <p>When you turn a face clockwise, that face itself rotates like a photo in an editor.</p>
+  <pre><code>function rotateCW(f) {
+  const old = cube[f].map(r =&gt; [...r]);
+  for (let r = 0; r &lt; n; r++)
+    for (let c = 0; c &lt; n; c++)
+      cube[f][c][n - 1 - r] = old[r][c];
+}
+</code></pre>
+  <p>This line is the core trick. <code>[r][c] -&gt; [c][n-1-r]</code>. It is the same mapping used in image rotation.</p>
+
+  <h2>3) Moving strips between neighbors</h2>
+  <p>A cube turn is two actions. rotate the turned face, then cycle four adjacent strips. The helper methods make that readable.</p>
+  <pre><code>function getRow(f, r) { return cube[f][r].slice(); }
+function setRow(f, r, v) { for (let i = 0; i &lt; n; i++) cube[f][r][i] = v[i]; }
+function getCol(f, c) { return cube[f].map(row =&gt; row[c]); }
+function setCol(f, c, v) { for (let i = 0; i &lt; n; i++) cube[f][i][c] = v[i]; }
+</code></pre>
+  <p>Analogy. You are passing trays between four servers in a square loop. Some trays need to be flipped before handing off, which is why <code>rev()</code> appears in some moves.</p>
+
+  <h2>4) A full move example. front face turn</h2>
+  <p>Here is the front move. You can read it as a directed cycle.</p>
+  <pre><code>function moveF(d) {
+  d = d || 0;
+  if (d === 0) rotateCW(2);
+  const uRow = n - 1 - d;
+  const dRow = d;
+  const rCol = d;
+  const lCol = n - 1 - d;
+  const t = getRow(0, uRow);
+  setRow(0, uRow, getCol(5, lCol));
+  setCol(5, lCol, rev(getRow(1, dRow)));
+  setRow(1, dRow, rev(getCol(4, rCol)));
+  setCol(4, rCol, t);
+}
+</code></pre>
+  <p><code>d</code> is layer depth. <code>d=0</code> means the outside layer, but larger cubes can turn inner slices too. That is how the same logic scales from 2×2 through 7×7.</p>
+
+  <h2>5) Scramble and solve are inverse playback</h2>
+  <p>Scramble does random legal moves and records each one in <code>moveHistory</code>. Solve does not search. It simply replays inverse moves in reverse order.</p>
+  <pre><code>function doSolve() {
+  if (!scrambled) return;
+  solving = true;
+  solveQueue = moveHistory.slice().reverse();
+  moveHistory = [];
+}
+</code></pre>
+  <p>Analogy. If you have a dance rehearsal video, "undo" is just playing the clip backward. You do not need to rediscover the choreography.</p>
+
+  <h2>6) why this feels solid. built-in sanity test</h2>
+  <p>Each move should return to identity after four clockwise turns. The sketch runs that as a self-test.</p>
+  <pre><code>// for each move and layer depth
+for (let i = 0; i &lt; 4; i++) MOVES[m](d);
+// cube should be solved again
+</code></pre>
+  <p>This catches orientation mistakes early, especially with back-face reversals where bugs like to hide.</p>
+
+  <h2>7) drawing the cube</h2>
+  <p>The renderer projects 3D points into 2D with an isometric transform. Then it draws three visible faces as quads. top, left, right. Side faces are darkened for depth cues.</p>
+  <p class="note">The model is exact cube logic. The rendering is illusion. That separation makes the sketch easier to trust and easier to tweak.</p>
+
+  <p>Net result. The piece behaves like a puzzle toy, but the code is mostly careful bookkeeping. Which is often what graphics work is when it goes well.</p>
+
+  <a class="back" href="../">← Back to main page</a>
+</article>
+</body>
+</html>

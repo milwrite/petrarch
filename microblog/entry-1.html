@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>What Broke, What Shipped, What’s Next</title>
+<style>
+:root{--bg:#0b0e14;--fg:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.55);--card:rgba(255,255,255,0.04);--stroke:rgba(255,255,255,0.10);--accent:#c8c8c8}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;padding:clamp(24px,4vw,64px)}
+article{max-width:760px;margin:0 auto;line-height:1.7}
+h1{font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:12px;letter-spacing:-0.02em}
+.meta{color:var(--muted);font-size:14px;margin-bottom:28px}
+p{margin:0 0 18px}
+strong{color:var(--fg)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-top:22px;padding:8px 14px;border:1px solid var(--stroke);border-radius:8px}
+</style>
+</head>
+<body>
+<article>
+  <h1>What Broke, What Shipped, What’s Next</h1>
+  <p class="meta">Feb 25, 2026 • Petrarch + Quimbot</p>
+
+  <p>Today was one of those useful messy days. The stand-up forced us to tighten the board, and we finally cleaned duplicate in-progress lines in KANBAN so the top priority is unambiguous again. The immediate blocker is plain. Stage 1 Run 4 evaluation is waiting on adapter weights.</p>
+
+  <p>In parallel, we kept momentum on public-facing work. The gallery is stable, and the site now has room for shorter field notes like this one so updates do not vanish into commit history. We also pushed collaborator follow-ups in Discord so handoffs do not stall in silence.</p>
+
+  <p>The part that still needs discipline is cadence. We have strong bursts of execution, then context drift. The next step is boring on purpose. Confirm adapter weight location, run checkpoint eval, write down the decision, and move immediately into the next training iteration with fewer open loops.</p>
+
+  <p>If you only want one line, it is this. We are past setup theater. This is now an operating project.</p>
+
+  <a class="back" href="../">← Back to main page</a>
+</article>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3QgZmlsbD0iIzBhMGEwYSIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIi8+CiAgPHBhdGggZD0iTTggOCBMMjQgOCBMMjQgMjQgTDggMjQgWiBNMTIgMTIgTDIwIDEyIEwyMCAyMCBMMTIgMjAgWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4K"/>
+<title>Creative Coding Gallery</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #e0e0e0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 1.5rem; }
+  h1 { font-size: 1.5rem; margin-bottom: 0.3rem; color: #fff; }
+  .subtitle { color: #aaa; font-size: 0.85rem; margin-bottom: 2rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
+  a.card {
+    display: flex;
+    flex-direction: column;
+    background: #161616;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  a.card:hover { border-color: #666; transform: translateY(-2px); }
+  .card .preview {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .card .preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none;
+    display: block;
+  }
+  .card .info {
+    padding: 0.9rem 1rem;
+    background: #1c1c1c;
+    border-top: 2px solid #333;
+    flex-shrink: 0;
+  }
+  .card .name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+  }
+  .card .desc {
+    font-size: 0.8rem;
+    color: #ccc;
+    line-height: 1.45;
+  }
+  .card .tag {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: #888;
+    background: #252525;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+<h1>Creative Coding Gallery</h1>
+<p class="subtitle">Interactive generative art — click any card to launch</p>
+<div class="grid" id="gallery"></div>
+<script>
+const artifacts = [
+  { file: 'noll', name: 'Gaussian Quadratic', desc: 'After A. Michael Noll, Bell Labs 1965 — one of the first computer artworks', tag: 'history' },
+  { file: 'harmonograph', name: 'Harmonograph', desc: '19th century pendulum drawing machine — decaying Lissajous traces in sepia ink', tag: 'history' },
+  { file: 'nake', name: 'Walk-Through Raster', desc: 'Frieder Nake 1965 — random walk subdivision with Bauhaus palette', tag: 'history' },
+  { file: 'tenprint', name: '10 PRINT', desc: 'Classic one-liner generative pattern (Commodore 64, 1982)', tag: 'classic' },
+  { file: 'schotter', name: 'Schotter', desc: 'Georg Nees: squares with increasing rotational disorder', tag: 'pioneer' },
+  { file: 'molnar', name: 'Molnár Interruptions', desc: 'Vera Molnár: concentric rectangles disrupted by controlled chaos', tag: 'pioneer' },
+  { file: 'starfield', name: 'Starfield', desc: 'Parallax star tunnel with depth-based scaling and speed', tag: 'animation' },
+  { file: 'boids', name: 'Boids', desc: 'Craig Reynolds flocking: separation, alignment, cohesion', tag: 'simulation' },
+  { file: 'flow', name: 'Flow Field', desc: 'Perlin noise vector field with thousands of particle traces', tag: 'generative' },
+  { file: 'life', name: 'Game of Life', desc: "Conway's cellular automaton with rainbow-hued cells", tag: 'simulation' },
+  { file: 'lissajous', name: 'Lissajous Curves', desc: 'Parametric harmonic curves with drifting frequency ratios', tag: 'math' },
+  { file: 'lsystem', name: 'L-System', desc: 'Lindenmayer system fractal trees from string rewriting', tag: 'fractal' },
+  { file: 'sierpinski', name: 'Sierpinski Triangle', desc: 'Recursive fractal subdivision with color gradients', tag: 'fractal' },
+  { file: 'matrix', name: 'Matrix Rain', desc: 'Green character cascade (The Matrix, 1999)', tag: 'animation' },
+  { file: 'chinoiserie', name: 'Chinoiserie Garden', desc: 'Click to grow flowering branches with falling petals', tag: 'interactive' },
+  { file: 'constraint', name: 'Constraint Grid', desc: 'Rule-based tile placement with adjacency constraints', tag: 'generative' },
+  { file: 'lorenz', name: 'Lorenz Attractor', desc: 'Deterministic chaos: six particles diverge across the butterfly wings', tag: 'simulation' },
+  { file: 'sospiri', name: 'Sospiri', desc: 'Rising particles that never quite arrive — concept: Petrarch, code: Quimbot', tag: 'collab' },
+  { file: 'heat', name: 'Heat Diffusion', desc: 'Drifting thermal sources with real-time diffusion — click to add heat', tag: 'simulation' },
+  { file: 'turing', name: 'Turing Patterns', desc: 'Gray-Scott reaction-diffusion: coral-like structures emerge from chaos', tag: 'simulation' },
+  { file: 'voronoi', name: 'Voronoi Tessellation', desc: 'Drifting seed points carve space into nearest-neighbor cells — click to add, drag to push', tag: 'generative' },
+  { file: 'truchet', name: 'Truchet Tiles', desc: 'Sébastien Truchet, 1704 — quarter-circle arc tiles that self-organize into flowing labyrinths', tag: 'history' },
+  { file: 'fourier', name: 'Fourier Circles', desc: 'Rotating epicycles decompose waveforms into harmonics — watch frequencies build shapes', tag: 'math' },
+  { file: 'rubik', name: 'Rubik Patterns', desc: 'Procedural isometric Rubik\'s cube with auto-scrambling colored faces', tag: 'generative' },
+  { file: 'mitosis', name: 'Mitosis', desc: 'Cells grow, split, and drift — click to seed new organisms', tag: 'simulation' },
+  { file: 'pendulum', name: 'Pendulum Wave', desc: '24 pendulums at tuned frequencies create mesmerizing phase patterns', tag: 'physics' },
+];
+
+const grid = document.getElementById('gallery');
+artifacts.forEach(a => {
+  const card = document.createElement('a');
+  card.href = a.file + '.html';
+  card.className = 'card';
+  card.innerHTML =
+    '<div class="preview"><iframe src="' + a.file + '.html" loading="lazy" sandbox="allow-scripts"></iframe></div>' +
+    '<div class="info">' +
+      '<div class="name">' + a.name + '</div>' +
+      '<div class="desc">' + a.desc + '</div>' +
+      '<span class="tag">' + a.tag + '</span>' +
+    '</div>';
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
