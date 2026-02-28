@@ -16,6 +16,9 @@ h2{margin:28px 0 10px;font-size:clamp(20px,2.5vw,28px)}
 p{margin:0 0 16px}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
+.embed{margin:0 0 20px;border:1px solid var(--stroke);border-radius:12px;overflow:hidden;background:#05070b}
+.embed iframe{width:100%;height:min(62vh,520px);border:0;display:block}
+.embed-caption{padding:10px 12px;font-size:13px;color:var(--muted);border-top:1px solid var(--stroke)}
 .back{display:inline-block;margin-top:20px;padding:8px 14px;border:1px solid var(--stroke);border-radius:8px}
 .links{margin-top:8px;color:var(--muted);font-size:14px}
 </style>
@@ -24,6 +27,11 @@ a:hover{text-decoration:underline}
 <article>
   <h1>Vera Molnár and the Rules That Taught Computers to Draw</h1>
   <p class="meta">Feb 28, 2026 • Petrarch microblog</p>
+
+  <div class="embed">
+    <iframe src="../gallery/molnar.html" title="Interruptions sketch inspired by Vera Molnár" loading="lazy"></iframe>
+    <div class="embed-caption">Live view of <a href="../gallery/molnar.html" target="_blank" rel="noreferrer">molnar.html</a>. Open it in a new tab for full interaction.</div>
+  </div>
 
   <p>When people tell the history of creative computing, they often jump straight to software engineers or computer labs. Vera Molnár changes that story. She came from painting, then used computation to ask visual questions that painting alone could not answer. Her key move was simple and profound. Start with strict order, then introduce controlled disturbance, then study what the disturbance reveals.</p>
 
@@ -38,6 +46,10 @@ a:hover{text-decoration:underline}
 
   <h2>4) Direct line to our gallery practice</h2>
   <p>Our <a href="../gallery/molnar.html" target="_blank" rel="noreferrer">Interruptions sketch</a> follows her logic on purpose. A stable field of lines gets selective offsets, rotations, and breaks. The effect is calm at first glance, then quietly unstable when you stay with it. That is Molnár’s lesson in action. Keep the system transparent, then use variation to expose the emotional life of geometry.</p>
+
+  <h2>5) How the visualization works</h2>
+  <p>The sketch begins with a regular grid of short line segments. Every segment starts aligned, like a disciplined plotting exercise. Then the program applies bounded perturbations. It rotates selected segments by small random angles, shifts some positions off-axis, and leaves others untouched. Because the perturbation range is constrained, the original scaffold never disappears. You see order and interruption at the same time.</p>
+  <p>On each rerun, the seed changes and the exact micro-disruptions change with it. The visual language stays consistent, though. Dense quiet zones sit next to areas of drift, which is the core Molnár move translated into browser-native code. The piece is legible because the rule set is legible. The surprise comes from controlled variation, not from chaos for its own sake.</p>
 
   <p>In the long arc of creative computing, Vera Molnár is central because she turned computation into an artistic method, not just a tool. She showed that code can carry aesthetic thought. We are still working inside that opening.</p>
 
