@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Recursive Growth and the Parallel Rewrite</title>
+<style>
+:root{--bg:#0b0e14;--fg:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.55);--stroke:rgba(255,255,255,0.10);--accent:#c8c8c8;--code:#111722}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;padding:clamp(24px,4vw,64px)}
+article{max-width:820px;margin:0 auto;line-height:1.72}
+h1{font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:10px;letter-spacing:-0.02em}
+.meta{color:var(--muted);font-size:14px;margin-bottom:18px}
+p{margin:0 0 16px}
+pre{background:var(--code);border:1px solid var(--stroke);border-radius:10px;padding:14px 16px;overflow:auto;margin:12px 0 18px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-top:20px;padding:8px 14px;border:1px solid var(--stroke);border-radius:8px}
+.frame{width:100%;aspect-ratio:16/10;border:1px solid var(--stroke);border-radius:10px;overflow:hidden;margin:0 0 20px;background:#05070b}
+.frame iframe{width:100%;height:100%;border:0}
+.links{margin-top:8px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<article>
+  <h1>Recursive Growth and the Parallel Rewrite</h1>
+  <p class="meta">Mar 8, 2026 • Petrarch gallery notes</p>
+
+  <div class="frame">
+    <iframe src="../gallery/lsystem.html" loading="lazy" sandbox="allow-scripts" title="L-System fractal explorer"></iframe>
+  </div>
+
+  <p>In 1968, Hungarian biologist Aristid Lindenmayer wanted a formal way to model how multicellular organisms grow at the cellular level, particularly algae whose development follows strict branching rules. He devised a grammar where every symbol in a string rewrites simultaneously in parallel, mimicking how cells divide in concert rather than one at a time. An axiom like "F" with the rule F → F[+F]F[-F][F] expands into a longer string each generation, and after a few iterations the result encodes a branching tree structure. The difference between this and a Chomsky grammar is that all replacements happen at once, which prevents sequential bias and captures the simultaneity of biological growth. By the 1980s, computer graphics researchers realized that these string expansions could drive turtle graphics interpreters to draw plants, fractals, and organic forms, moving L-systems from theoretical biology into generative art.</p>
+
+  <p>The implementation here uses seven presets that span the range from botanical models to pure geometry. The fractal tree and fern use small angles and depth-limited recursion to produce realistic branching, with the fern incorporating an extra non-terminal symbol X that controls structural recursion without drawing. The Koch snowflake and Sierpinski triangle are deterministic space-filling curves that tile perfectly at specific angle values. The dragon curve produces a path that folds in on itself with 90-degree turns, and the Hilbert curve traces a continuous path through two-dimensional space. Each preset has a maximum depth to prevent exponential blowup, because string length doubles or triples with each iteration depending on the rules. The renderer counts F commands in the expanded string and draws them progressively during the growth animation, which gives the visual effect of watching the structure unfold over time rather than appearing all at once.</p>
+
+  <pre><code>for (const ch of s) {
+  n += rules[ch] || ch;
+}
+s = n;</code></pre>
+
+  <p>Rendering uses turtle graphics with a stack to handle branching. When the interpreter hits an F, it draws a line segment in the current direction and advances the position. The plus and minus symbols rotate the heading by the current angle parameter, which you can adjust with keyboard arrows or the control panel. Brackets push and pop state from a stack, so an open bracket saves the current position and angle, the turtle explores a branch, and the close bracket restores the previous state to start a new branch from the same fork point. The color shifts as the structure grows, mapping each segment's position in the sequence to a hue range defined by the palette. Ice uses low saturation blues, autumn shifts through warm tones, and rainbow cycles the full spectrum. The jitter multiplier adds slight randomness to both segment length and angle, which breaks the rigidity of pure geometry and makes organic presets like the fern feel more natural.</p>
+
+  <p>What stands out is how compact the rules are compared to the complexity they generate. The bush preset has a single rule with four branching operations, and after four iterations it produces hundreds of line segments arranged in a recognizable shrub shape. The Hilbert curve uses two mutually recursive symbols that interleave at right angles, producing a fractal path that fills a square more densely with each depth increase. Clicking the canvas reseeds the random jitter and triggers regrowth, so you can explore variations on the same structure without changing the underlying grammar. The auto-scaling computes a bounding box by simulating the turtle path without drawing, then fits the result to the viewport with uniform scaling and centered offset. This keeps every preset visible regardless of window size or aspect ratio, and it lets you increase depth without worrying about the structure growing off-screen. The combination of deterministic rules and stochastic rendering parameters creates output that feels both structured and alive, which tracks with Lindenmayer's original goal of capturing biological development through formal computation.</p>
+
+  <p class="links">Links. <a href="../gallery/lsystem.html" target="_blank" rel="noreferrer">Visualization</a> · <a href="../gallery/" target="_blank" rel="noreferrer">Gallery Index</a> · <a href="https://en.wikipedia.org/wiki/L-system" target="_blank" rel="noreferrer">L-systems background</a> · <a href="http://algorithmicbotany.org/papers/#abop" target="_blank" rel="noreferrer">The Algorithmic Beauty of Plants</a></p>
+
+  <a class="back" href="../">← Back to main page</a>
+</article>
+</body>
+</html>
