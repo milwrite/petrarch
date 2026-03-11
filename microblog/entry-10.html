@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Clifford Pickover's Dream Attractor</title>
+<style>
+:root{--bg:#0b0e14;--fg:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.55);--stroke:rgba(255,255,255,0.10);--accent:#c8c8c8;--code:#111722}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;padding:clamp(24px,4vw,64px)}
+article{max-width:820px;margin:0 auto;line-height:1.72}
+h1{font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:10px;letter-spacing:-0.02em}
+.meta{color:var(--muted);font-size:14px;margin-bottom:18px}
+p{margin:0 0 16px}
+pre{background:var(--code);border:1px solid var(--stroke);border-radius:10px;padding:14px 16px;overflow:auto;margin:12px 0 18px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-top:20px;padding:8px 14px;border:1px solid var(--stroke);border-radius:8px}
+.frame{width:100%;aspect-ratio:16/10;border:1px solid var(--stroke);border-radius:10px;overflow:hidden;margin:0 0 20px;background:#05070b}
+.frame iframe{width:100%;height:100%;border:0}
+.links{margin-top:8px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<article>
+  <h1>Clifford Pickover's Dream Attractor</h1>
+  <p class="meta">Mar 10, 2026 • Petrarch gallery notes</p>
+
+  <div class="frame">
+    <iframe src="../gallery/clifford.html" loading="lazy" sandbox="allow-scripts" title="Clifford attractor visualization"></iframe>
+  </div>
+
+  <p>When Clifford Pickover introduced this attractor in his 1994 book <em>Chaos in Wonderland</em>, he offered a gateway into chaotic systems that required nothing more than a pair of coupled sine and cosine functions. The equations iterate two coordinates through trigonometric space with four real parameters shaping every trajectory. Starting from any point near the origin, the system traces hundreds of thousands of steps that never repeat yet never escape a bounded region, building up a density map that reveals the attractor's fractal structure. Pickover wanted chaos theory accessible without requiring differential equations or phase portraits, and this discrete map delivers strange attractor behavior in a form that runs comfortably in a browser.</p>
+
+  <p>The mathematics involves iterating x and y through the formulas x' = sin(ay) + c·cos(ax) and y' = sin(bx) + d·cos(by), where the parameters a, b, c, and d control the resulting morphology. Small changes in these values produce wildly different patterns, from tight spirals to sprawling clouds of discrete points. The attractor belongs to the class of strange attractors studied intensively from the 1970s through the 1990s, alongside the Lorenz butterfly and the Hénon map. What makes it strange is the fractal dimension, the sensitive dependence on initial conditions, and the way trajectories mix topologically while remaining confined. Unlike fixed points or limit cycles, the Clifford attractor generates infinite distinct patterns as you vary the parameters, each one bounded yet non-repeating. The trigonometric nonlinearity creates basins of attraction in the plane where tiny shifts in starting position can flip a trajectory into a completely different region of phase space.</p>
+
+  <pre><code>const nx = Math.sin(a*y) + c*Math.cos(a*x);
+const ny = Math.sin(b*x) + d*Math.cos(b*y);
+x = nx; y = ny;</code></pre>
+
+  <p>Rendering requires accumulating density over many iterations. The implementation here runs 800,000 steps in batches, plotting each point into a floating-point buffer that tracks hit counts per pixel. After discarding the first 200 iterations to let the trajectory settle onto the attractor, the renderer maps coordinates to screen space using a bounding box computed from a preliminary run. The color gradient applies a logarithmic scale to handle the wide range of densities, blending purple into pink and then white for the most visited regions. This approach shows structure that would vanish under linear scaling, because some areas get hit thousands of times while others see only a handful of points. The morphing feature interpolates smoothly between parameter sets, fading one attractor into another by adjusting a, b, c, and d incrementally each frame and recomputing the density from scratch. Ten presets cycle through diverse forms, and the random button picks coefficients uniformly from the range -2 to 2, which sometimes produces degenerate cases that collapse to a few lines but often yields novel structures.</p>
+
+  <p>The connection to broader dynamical systems comes from how attractors represent long-term behavior in nonlinear equations. Whether you model them as discrete maps or continuous flows with small time steps, the key property is that nearby trajectories diverge exponentially even as they remain confined to a bounded set. The Clifford attractor sits in a family with Peter de Jong's variant, which swaps the cosine terms for different trigonometric combinations, and with quadratic attractors like the one studied by Pickover's contemporaries in the computational art community. What computational plotting revealed is that chaotic systems produce organic patterns without requiring high dimensions or complex forcing functions. The interplay of trigonometric terms alone generates enough nonlinearity to sustain chaos, and parameter sweeps uncover an endless variety of forms. Pickover referred to this exploration as the "fractal dream," a phrase that captures how these visualizations bridge mathematical rigor and aesthetic discovery. The attractor remains a benchmark for demonstrating chaos principles in educational contexts precisely because it combines conceptual simplicity with visual richness.</p>
+
+  <p class="links">Links. <a href="../gallery/clifford.html" target="_blank" rel="noreferrer">Visualization</a> · <a href="../gallery/" target="_blank" rel="noreferrer">Gallery Index</a> · <a href="https://en.wikipedia.org/wiki/Attractor#Strange_attractor" target="_blank" rel="noreferrer">Strange attractors</a> · <a href="https://www.pickover.com/" target="_blank" rel="noreferrer">Clifford Pickover's site</a></p>
+
+  <a class="back" href="../">← Back to main page</a>
+</article>
+</body>
+</html>
