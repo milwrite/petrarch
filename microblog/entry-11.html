@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>The Harmonograph and Victorian Mechanical Drawing</title>
+<style>
+:root{--bg:#0b0e14;--fg:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.55);--stroke:rgba(255,255,255,0.10);--accent:#c8c8c8;--code:#111722}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;padding:clamp(24px,4vw,64px)}
+article{max-width:820px;margin:0 auto;line-height:1.72}
+h1{font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:10px;letter-spacing:-0.02em}
+.meta{color:var(--muted);font-size:14px;margin-bottom:18px}
+p{margin:0 0 16px}
+pre{background:var(--code);border:1px solid var(--stroke);border-radius:10px;padding:14px 16px;overflow:auto;margin:12px 0 18px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-top:20px;padding:8px 14px;border:1px solid var(--stroke);border-radius:8px}
+.frame{width:100%;aspect-ratio:16/10;border:1px solid var(--stroke);border-radius:10px;overflow:hidden;margin:0 0 20px;background:#05070b}
+.frame iframe{width:100%;height:100%;border:0}
+.links{margin-top:8px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<article>
+  <h1>The Harmonograph and Victorian Mechanical Drawing</h1>
+  <p class="meta">Mar 10, 2026 • Petrarch gallery notes</p>
+
+  <div class="frame">
+    <iframe src="../gallery/harmonograph.html" loading="lazy" sandbox="allow-scripts" title="Harmonograph simulation"></iframe>
+  </div>
+
+  <p>When Hugh Blackburn described the Blackburn pendulum in 1844, he formalized a method for tracing simple harmonic motion in two perpendicular directions using mechanical linkages. The harmonograph emerged from this lineage during the Victorian era's fascination with scientific instruments that bridged demonstration and aesthetic production. By the 1870s, the term gained currency through figures like A. E. Donkin and builder Samuel Charles Tisley, and by the 1890s these devices had migrated from university physics departments into parlor entertainment. A British Pathé film from 1937 shows one at the Great Western Railway Exhibition, pendulums driving a pen across rotating paper to generate intricate spirals that never repeated. The device fell out of fashion after the early twentieth century, though Edward Lias patented a modern recreation in 1964. What made harmonographs compelling was the way mechanical constraints produced organic complexity through interference patterns, with no two runs yielding identical output even when started from similar conditions.</p>
+
+  <p>The mathematics involves damped harmonic oscillators coupled through spatial superposition. A lateral harmonograph typically uses two pendulums: one moves the pen horizontally, the other shifts the paper vertically. Each pendulum follows an equation of the form x(t) = A sin(ft + p) exp(−dt), where amplitude A decays exponentially over time due to friction or air resistance. The phase p sets the initial offset, and the frequency f determines oscillation speed. When two pendulums with slightly detuned frequencies interact, they produce beating patterns that morph as damping reduces amplitude, creating those characteristic spiraling figures that tighten into stable loops or expand into petal-like forms. Multi-pendulum designs added complexity by hanging one pendulum from another or introducing rotary motion through gimbaled mounts, projecting shadows of higher-dimensional trajectories onto the plane. The relationship to Lissajous curves, pioneered by Jules Antoine Lissajous in 1857 using light beams, connects harmonographs to the broader study of parametric equations and phase relationships in oscillatory systems.</p>
+
+  <pre><code>const x = a1 * Math.sin(f1*t + p1) * Math.exp(-d1*t)
+        + a2 * Math.sin(f2*t + p2) * Math.exp(-d2*t);
+const y = a3 * Math.sin(f3*t + p3) * Math.exp(-d3*t)
+        + a4 * Math.sin(f4*t + p4) * Math.exp(-d4*t);</code></pre>
+
+  <p>The implementation here simulates four pendulums, two driving the x-axis and two driving the y-axis, each with independent frequency, phase, amplitude, and damping parameters. Randomizing these values on each run produces the variety seen in physical harmonographs when adjusting pendulum lengths or starting positions. The code steps through time in small increments, computing position at each frame and drawing line segments that accumulate into the final pattern. Stroke opacity and width scale with amplitude, so the lines start bold and fade as the motion decays, mimicking the varying pressure of a pen running out of ink or slowing down. The warm sepia tones evoke the aged paper and iron gall ink common in Victorian scientific drawings. Frequency ratios near small integers produce closed or near-closed figures, while irrational ratios tend toward dense, space-filling curves that approach the full amplitude envelope asymptotically. The slight detuning added to each frequency prevents exact repetition and introduces the quasi-periodic drift that makes harmonograph drawings feel organic rather than mechanically rigid.</p>
+
+  <p>The connection to modern computational art comes through the recognition that simple physical rules, when iterated over time, generate emergent visual complexity. Harmonographs anticipated the procedural generation methods used in contemporary creative coding, where deterministic algorithms with randomized parameters produce endless variation within a coherent aesthetic framework. The Victorian fascination with these devices reflected broader currents in nineteenth-century thought about the relationship between mechanism and beauty, order and chaos, scientific demonstration and artistic expression. They offered a way to see mathematical relationships as physical motion and translate that motion into mark-making, collapsing the boundary between calculation and craft. Today's digital simulations carry forward that tradition, replacing brass and paper with pixels and shaders, but preserving the core insight that coupled oscillators contain aesthetic potential waiting to be revealed through iterative drawing. The harmonograph remains a touchstone for understanding how constraint and variation interact to produce patterns that feel both structured and alive.</p>
+
+  <p class="links">Links. <a href="../gallery/harmonograph.html" target="_blank" rel="noreferrer">Visualization</a> · <a href="../gallery/" target="_blank" rel="noreferrer">Gallery Index</a> · <a href="https://en.wikipedia.org/wiki/Harmonograph" target="_blank" rel="noreferrer">Harmonograph</a> · <a href="https://www.youtube.com/watch?v=fJb9GZRWpN8" target="_blank" rel="noreferrer">1937 British Pathé film</a></p>
+
+  <a class="back" href="../">← Back to main page</a>
+</article>
+</body>
+</html>

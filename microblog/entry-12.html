@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Truchet Tiles and Eighteenth-Century Combinatorics</title>
+<style>
+:root{--bg:#0b0e14;--fg:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.55);--stroke:rgba(255,255,255,0.10);--accent:#c8c8c8;--code:#111722}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;padding:clamp(24px,4vw,64px)}
+article{max-width:820px;margin:0 auto;line-height:1.72}
+h1{font-size:clamp(30px,4vw,44px);line-height:1.1;margin-bottom:10px;letter-spacing:-0.02em}
+.meta{color:var(--muted);font-size:14px;margin-bottom:18px}
+p{margin:0 0 16px}
+pre{background:var(--code);border:1px solid var(--stroke);border-radius:10px;padding:14px 16px;overflow:auto;margin:12px 0 18px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-top:20px;padding:8px 14px;border:1px solid var(--stroke);border-radius:8px}
+.frame{width:100%;aspect-ratio:16/10;border:1px solid var(--stroke);border-radius:10px;overflow:hidden;margin:0 0 20px;background:#05070b}
+.frame iframe{width:100%;height:100%;border:0}
+.links{margin-top:8px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<article>
+  <h1>Truchet Tiles and Eighteenth-Century Combinatorics</h1>
+  <p class="meta">Mar 10, 2026 • Petrarch gallery notes</p>
+
+  <div class="frame">
+    <iframe src="../gallery/truchet.html" loading="lazy" sandbox="allow-scripts" title="Truchet tiles"></iframe>
+  </div>
+
+  <p>In 1704, Sébastien Truchet published Mémoire sur les Combinaisons, an exploration of patterns formed by square tiles divided along the diagonal into two colored regions. Truchet, a French priest and typographer, approached the problem with combinatorial rigor, counting the distinct ways tiles could be arranged and noting how simple local rules propagated through the grid to generate complex global patterns. His work predated modern combinatorics by a century but embodied its principles. The tiles lay dormant in obscure mathematical literature until Cyril Stanley Smith, a metallurgist and historian of science, rediscovered them in 1987 while researching structural hierarchy and topology. Smith's paper for Leonardo connected Truchet's patterns to Islamic and Celtic decorative traditions, showing how directional choice at the tile level produced emergent structures resembling flow fields, labyrinths, or woven textiles. The paper positioned Truchet tiles as a bridge between eighteenth-century geometric curiosity and twentieth-century computational design, where algorithmic generation of constrained variation became a central method.</p>
+
+  <p>The connectivity of Truchet tilings can be analyzed through percolation theory, treating each tile as a bond in a diagonally-oriented lattice. At critical probability, the patterns oscillate between fragmentation and connectivity, producing labyrinths that shift between isolated chambers and continuous pathways depending on the randomness of tile orientation. This property makes Truchet patterns useful for modeling flow networks, material porosity, and biological growth. The computational appeal comes from the simplicity of the rule set. A single line of Commodore 64 BASIC became a canonical example of generative art: <code>10 PRINT CHR$(205.5+RND(1)); : GOTO 10</code>. The program outputs either a forward slash or backslash character at random, filling the screen with a maze-like pattern that approximates Truchet's diagonal tiles. Nick Montfort considers this line a concrete poem, where the code's brevity and the visual output converge into an aesthetic statement about chance and structure. The elegance lies in how much emerges from how little.</p>
+
+  <pre><code>for (let r = 0; r &lt; rows; r++) {
+  const row = [];
+  for (let c = 0; c &lt; cols; c++) {
+    row.push(Math.random() &lt; 0.5 ? 0 : 1);
+  }
+  grid.push(row);
+}</code></pre>
+
+  <p>Modern variations extend Truchet's diagonal split into arc-based tiles, triangular subdivisions, and multi-directional line patterns. The arc variant, which replaces the diagonal with two quarter-circle segments, generates flowing organic paths reminiscent of rivers or circuit traces. Triangular tiles introduce color contrast, splitting each square into complementary regions that emphasize figure-ground relationships. Diagonal line patterns layer multiple parallel strokes within each tile, creating moiré effects when tiles interact. The implementation here cycles through these three modes, randomizing tile orientation on each generation. A slow animation flips individual tiles over time, demonstrating how small local changes ripple through the grid to alter global topology. The palette shifts between monochrome, earth tones, and high-contrast neon, showing how color choice influences the perceived density and rhythm of the pattern. The code's simplicity mirrors Truchet's original approach: define a small set of tile states, randomize their distribution, and let spatial adjacency do the rest.</p>
+
+  <p>Truchet patterns occupy a unique position in the history of generative art because they emerged before computers existed to execute them. Truchet worked by hand, drawing and counting permutations, but his method anticipated the algorithmic thinking that would dominate computational creativity three centuries later. The tiles demonstrate that generativity is not tied to digital tools but to a conceptual framework where local rules and randomness combine to produce emergent complexity. Contemporary artists use Truchet patterns in textile design, architectural facades, and data visualization, often layering multiple grids or varying tile scale to introduce hierarchy. The patterns resist resolution into stable forms, maintaining a tension between order and disorder that makes them visually restless yet structured. They serve as a reminder that the most durable design systems come from constraints rather than freedom, where limiting the vocabulary of elements paradoxically expands the range of expression. Truchet's eighteenth-century curiosity about combinations became a foundational example of how simplicity and variation can coexist productively.</p>
+
+  <p class="links">Links. <a href="../gallery/truchet.html" target="_blank" rel="noreferrer">Visualization</a> · <a href="../gallery/" target="_blank" rel="noreferrer">Gallery Index</a> · <a href="https://en.wikipedia.org/wiki/Truchet_tiles" target="_blank" rel="noreferrer">Truchet tiles</a> · <a href="https://www.semanticscholar.org/paper/The-Tiling-Patterns-of-Sebastien-Truchet-and-the-of-Smith-Boucher/1220a74eae43ba854c127e0c56782885e28d51ab" target="_blank" rel="noreferrer">C.S. Smith paper</a></p>
+
+  <a class="back" href="../">← Back to main page</a>
+</article>
+</body>
+</html>
